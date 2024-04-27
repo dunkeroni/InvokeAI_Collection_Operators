@@ -20,6 +20,7 @@ LIST_OPERATIONS = Literal[
     "ABS",
     "MAG",
     "PAD",
+    "APPEND",
     "CLAMP_MIN",
     "CLAMP_MAX",
 ]
@@ -32,6 +33,7 @@ LIST_OPERATIONS_LABELS = {
     "ABS": "Absolute Value C=|A|",
     "MAG": "Magnitude C=||A||",
     "PAD": "Pad C=AU{s,...}|l(C)=l(B)",
+    "APPEND": "Append C={A,B}",
     "CLAMP_MIN": "Clamp Min C={max(s,x)∀x∈A}",
     "CLAMP_MAX": "Clamp Max C={min(s,x)∀x∈A}",
 }
@@ -41,7 +43,7 @@ LIST_OPERATIONS_LABELS = {
             title="Float Collection Math",
             tags=["math", "collection"],
             category="math",
-            version="1.0.1"
+            version="1.0.2"
             )
 class FloatCollectionMathInvocation(BaseInvocation):
     """Performs a math operation on a collection of floats. Usually truncates to the length of the shorter list"""
@@ -78,6 +80,8 @@ class FloatCollectionMathInvocation(BaseInvocation):
             result = [sum(x ** 2 for x in self.a) ** 0.5]
         elif self.operation == "PAD":
             result = self.a + [self.s] * (len(self.b) - len(self.a))
+        elif self.operation == "APPEND":
+            result = self.a + self.b
         elif self.operation == "CLAMP_MIN":
             result = [max(self.s, x) for x in self.a]
         elif self.operation == "CLAMP_MAX":
